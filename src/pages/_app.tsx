@@ -12,7 +12,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <Container>
       <Header>
-        <Image src={logoImg} alt="" width={80}/>
+        <Image src={logoImg} alt="" width={50}/>
       </Header>
 
       <Component {...pageProps} />
