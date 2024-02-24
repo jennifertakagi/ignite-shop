@@ -4,13 +4,15 @@ import { globalStyles } from "../styles/global"
 import logoImg from "../assets/logo.png"
 import { Container, Header } from "../styles/pages/app"
 
+import Image from "next/image"
+
 globalStyles()
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <Container>
       <Header>
-        <img style={{width: 80 }} src={logoImg.src} alt="" />
+      <Image src={logoImg} alt="" width={80}/>
       </Header>
 
       <Component {...pageProps} />
