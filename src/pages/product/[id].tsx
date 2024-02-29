@@ -1,5 +1,7 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import axios from "axios";
+import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/image";
+import { useState } from "react";
 import Stripe from "stripe";
 import { stripe } from "../../lib/stripe";
 import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product"
@@ -11,10 +13,31 @@ interface ProductProps {
     imageUrl: string
     price: string
     description: string
+    defaultPriceId: string
   }
 }
 
 export default function Product({ product }: ProductProps) {
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false);
+
+  async function handleBuyButton() {
+    try {
+      setIsCreatingCheckoutSession(true);
+
+      const response = await axios.post('/api/checkout', {
+        priceId: product.defaultPriceId,
+      })
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl;
+    } catch (err) {
+      setIsCreatingCheckoutSession(false);
+
+      alert('Fail on redirecting to checkout!')
+    }
+  }
+
   return (
     <ProductContainer>
       <ImageContainer>
@@ -27,7 +50,7 @@ export default function Product({ product }: ProductProps) {
 
         <p>{product.description}</p>
 
-        <button>
+        <button disabled={isCreatingCheckoutSession} onClick={handleBuyButton}>
           Buy now
         </button>
       </ProductDetails>
@@ -47,14 +70,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ params }) => {
-  const productId = params?.id || '';
+  const productId = params.id;
 
   const product = await stripe.products.retrieve(productId, {
     expand: ['default_price']
   });
 
   const price = product.default_price as Stripe.Price;
-  const priceUnitAmount = price.unit_amount || 0;
 
   return {
     props: {
@@ -65,8 +87,9 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
         price: new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD'
-        }).format(priceUnitAmount / 100),
-        description: product.description
+        }).format(price.unit_amount / 100),
+        description: product.description,
+        defaultPriceId: price.id
       }
     },
     revalidate: 60 * 60 * 1 // 1 hours
