@@ -121,18 +121,6 @@ Features:
    <img src="docs/ignite-shop.gif" />
 </p>
 
-<p align="left">
-   <img src="docs/homepage.png" />
-</p>
-
-<p align="left">
-   <img src="docs/product-page.png" />
-</p>
-
-<p align="left">
-   <img src="docs/checkout-page.png" />
-</p>
-
 <!-- ROADMAP -->
 
 ## Roadmap
