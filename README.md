@@ -68,8 +68,8 @@ A simple e-commerce shop, using Stripe as a management.
 Features:
 
 - Register products in Stripe
-- Sell them in the website
-- Payment using Stripe in checkout step
+- Sell them on the website
+- Payment using Stripe in the checkout step
 
 ### Built With
 
@@ -108,7 +108,7 @@ Features:
    ```sh
    pnpm | npm install
    ```
-3. Run the following commands in root folder start the application in a development environment:
+3. Run the following commands in the root folder to start the application in a development environment:
    ```sh
    pnpm run dev | npm run dev
    ```
